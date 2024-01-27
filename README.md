@@ -61,7 +61,7 @@ You can also open an issue if you find any bugs or have any suggestions.
 
 ## Documentation
 
-For more details about the project and its usage, please refer to the [Documentation](https://matheusvsn.github.io/vsn-tournament-manager/m).
+For more details about the project and its usage, please refer to the [Documentation](https://matheusvsn.github.io/vsn-tournament-manager/).
 
 ## License
 
