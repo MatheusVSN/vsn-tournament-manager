@@ -1,0 +1,173 @@
+# League
+
+This route is responsible to actions related to the tournament leagues.
+
+## POST `/leagues`
+
+Create a new league
+
+### Request Body
+
+```json
+{
+  "name": string,
+  "completed": boolean
+}
+```
+
+### Responses
+
+#### 200(OK)
+
+The league have been created succesfully
+
+```json
+{
+  "message": string,
+  "data": {
+    "id": number
+  }
+}
+```
+
+#### 400(Bad Request)
+
+A bad request can happen for the following reasons:
+
+- The user does not own the tournament
+- The league name is longer than 20 characters
+
+## GET `/leagues/<league_id>`
+
+Get a league by it's id
+
+### Parameters
+
+- `league_id`: The id of the league
+
+### Responses
+
+#### 200(OK)
+
+The league have been fetched succesfully
+
+```json
+{
+  "message": string,
+  "data": {
+    "id": number,
+    "name": string,
+    "completed": boolean
+  }
+}
+```
+
+#### 400(Bad Request)
+
+A bad request can happen for the following reasons:
+
+- If the tournament is private and the user does not own it
+- The tournament does not exist
+- The league does not exist
+
+## GET `/leagues/<league_id>/standings-table`
+
+Get the standings table of a league by it's id
+
+### Parameters
+
+- `league_id`: The id of the league
+
+### Responses
+
+#### 200(OK)
+
+The standings table have been fetched succesfully
+
+```json
+{
+  "message": string,
+  "data": [
+    {
+      "team_id": number,
+      "team_name": string,
+      "total_pointspoints": number,
+      "win": number,
+      "draw": number,
+      "loss": number,
+      "goals_scored": number,
+      "goals_against": number,
+      "goal_difference": number
+    },
+    // ...
+  ]
+}
+```
+
+#### 400(Bad Request)
+
+A bad request can happen for the following reasons:
+
+- If the tournament is private and the user does not own it
+- The tournament does not exist
+- The league does not exist
+
+## PUT `/leagues/<league_id>`
+
+Update a league by it's id
+
+### Parameters
+
+- `league_id`: The id of the league
+
+### Request Body
+
+```json
+{
+  "name": string,
+  "completed": boolean
+}
+```
+
+### Responses
+
+#### 200(OK)
+
+The league have been updated succesfully
+
+```json
+{
+  "message": string
+}
+```
+
+#### 400(Bad Request)
+
+A bad request can happen for the following reasons:
+
+- The user does not own the tournament
+- The league name is longer than 20 characters
+- The tournament does not exist
+- The league does not exist
+
+## DELETE `/leagues/<league_id>`
+
+Delete a league by it's id
+
+### Parameters
+
+- `league_id`: The id of the league
+
+### Responses
+
+#### 204(No Content)
+
+The league have been deleted succesfully. This response do not have a body.
+
+#### 400(Bad Request)
+
+A bad request can happen for the following reasons:
+
+- The user does not own the tournament
+- The tournament does not exist
+- The league does not exist

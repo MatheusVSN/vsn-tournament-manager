@@ -1,0 +1,119 @@
+# Team
+
+This route is responsible for actions related to the tournament teams
+
+## POST `/teams`
+
+Creates a new team
+
+### Request Body
+
+```json
+{
+    "name": string
+}
+```
+
+### Responses
+
+#### 201(Created)
+
+The team has been created successfully
+
+```json
+{
+    "id": number
+}
+```
+
+#### 400(Bad Request)
+
+A bad request can happen due to the following reasons:
+
+- The user does not own the tournament
+- The team name contains more than 40 characters
+
+## GET `/teams/<team_id>`
+
+Get a team by it's id
+
+### Parameters
+
+- `team_id`: The id of the team
+
+### Responses
+
+#### 200(OK)
+
+The team data have been retreived successfully
+
+```json
+{
+    "id": number,
+    "name": string
+}
+```
+
+#### 400(Bad Request)
+
+A bad request can happen due to the following reasons:
+
+- The tournament is private and the user is not the owner
+- The team does not exist
+
+## PUT `/teams/<team_id>`
+
+Edit a team by it's id
+
+### Parameters
+
+- `team_id`: The id of the team
+
+### Request Body
+
+```json
+{
+    "name": string
+}
+```
+
+### Responses
+
+#### 200(OK)
+
+The team has been updated
+
+```json
+{
+    "message": string
+}
+```
+
+#### 400(Bad Request)
+
+A bad request can happen due to the following reasons:
+
+- The user does not own the tournament
+- The team name contains more than 40 characters
+- The team does not exist
+
+## DELETE `/teams/<team_id>`
+
+Delete a team by it's id
+
+### Parameters
+
+- `team_id`: The id of the team
+
+### Responses
+
+#### 204(No Content)
+
+The team has been deleted. This response does not contain a body
+
+#### 400(Bad Request)
+
+A bad request can happen due to the following reasons:
+
+- The user does not own the tournament
+- The team does not exist

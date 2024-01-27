@@ -1,0 +1,179 @@
+# Fixture
+
+This route is responsible for handling fixtures operations on the league
+
+## GET `/fixtures`
+
+Gets all fixtures from the league
+
+### Responses
+
+#### 200(OK)
+
+The league fixtures have been succesfully retreived
+
+```json
+[
+    {
+        "id": number,
+        "home_team": {
+            "id": number,
+            "name": string
+        },
+        "away_team": {
+            "id": number,
+            "name": string
+        },
+        "home_score": number,
+        "away_score": number,
+        "played": boolean,
+        "round": number
+    }
+    // ...
+]
+```
+
+This does not contains any errors(except from Internal Server Error, if happens), but the fixtures will return empty if:
+
+- The tournament is private and the user does not own it
+- The league does not have any fixtures
+- The league or tournament does not exists
+
+## GET `fixtures/<fixture_id>`
+
+Gets a specific fixture from the league
+
+### Parameters
+
+- `fixture_id`: The id of the fixture to be retreived
+
+### Responses
+
+#### 200(OK)
+
+The fixture has been succesfully retreived
+
+```json
+{
+    "id": number,
+    "home_team": {
+        "id": number,
+        "name": string
+    },
+    "away_team": {
+        "id": number,
+        "name": string
+    },
+    "home_score": number,
+    "away_score": number,
+    "played": boolean,
+    "round": number
+}
+```
+
+#### 400(Bad Request)
+
+A bad request can happen for the following reasons:
+
+- The fixture does not exist
+- The tournament is private and the user does not owns it
+- The league or tournament does not exists
+
+## POST `/fixtures`
+
+Generates the fixtures for the league based on the team quantity.
+
+**For now, the fixtures are generated only 1 time, this means there's no "home-away" games yet.**
+
+### Responses
+
+#### 200(OK)
+
+The fixtures have been succesfully generated
+
+```json
+{
+    message: string
+}
+```
+
+#### 400(Bad Request)
+
+A bad request can happen for the following reasons:
+
+- The league already has fixtures
+- The league does not have any teams
+- The league does not have enough teams to generate the fixtures
+- The tournament or league does not exists
+- The user does not own the tournament
+
+## PUT `/fixtures/<fixture_id>`
+
+Updates the fixture data
+
+### Parameters
+
+- `fixture_id`: The id of the fixture to be updated
+
+### Request Body
+
+```json
+{
+    "home_score": number,
+    "away_score": number,
+    "played": boolean
+}
+```
+
+### Responses
+
+#### 200(OK)
+
+The fixture has been succesfully updated
+
+```json
+{
+    message: string,
+    data: {
+        "id": number,
+        "home_team": {
+            "id": number,
+            "name": string
+        },
+        "away_team": {
+            "id": number,
+            "name": string
+        },
+        "home_score": number,
+        "away_score": number,
+        "played": boolean,
+        "round": number
+    }
+}
+```
+
+#### 400(Bad Request)
+
+A bad request can happen for the following reasons:
+
+- The fixture does not exist
+- The user does not own the tournament
+- The league or tournament does not exists
+
+## DELETE `/fixtures`
+
+Deletes all fixtures from the league
+
+### Responses
+
+#### 204(No Content)
+
+The fixtures have been succesfully deleted. This response do not have a body.
+
+#### 400(Bad Request)
+
+A bad request can happen for the following reasons:
+
+- The league does not have any fixtures
+- The user does not own the tournament
+- The league or tournament does not exists

@@ -1,0 +1,1 @@
+pub const MYSQL_CUSTOM_ERROR: &str = "45000";

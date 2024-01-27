@@ -1,0 +1,27 @@
+{
+  "name": "tournament_docs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "deploy": "npm run build && npm run export && touch ./out/.nojekyll && gh-pages -d out -t true"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "20.11.7",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "next": "^14.1.0",
+    "nextra": "^2.13.2",
+    "nextra-theme-docs": "^2.13.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

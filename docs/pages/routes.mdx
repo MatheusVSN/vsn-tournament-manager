@@ -1,0 +1,41 @@
+import { Callout } from "nextra/components"
+
+# Routes
+
+The application provides several API endpoints, or "routes", that clients can use to interact with the application.
+Each route corresponds to a specific operation that can be performed, such as retrieving data, creating new data, updating existing data, or deleting data.
+Clients can send HTTP requests to these routes to perform these operations.
+The method of the HTTP request (GET, POST, PUT and DELETE) determines the type of operation to be performed.
+In the following sections, each route is documented in detail, including its method, URL, request parameters, request body, response and possible errors.
+
+Please note that any route can potentially return a 500 Internal Server Error status code if an unexpected error occurs on the server.
+In such cases, the response body will typically contain a message indicating that an error occurred:
+
+```json
+{
+  "message": "string"
+}
+```
+
+**All errors returns the same body structure as above**
+
+<Callout type="warning" emoji="⚠️">
+  Some routes are nested under other routes. 
+  They use the route name and id from the parent route.
+  
+  For example:
+
+Let's say you want to perform a operation on a league.
+If you observe, you will see that the league route is nested under the tournaments route:
+
+![Nested route example](../images/NestedRouteExample.png)
+
+To perform a PUT call on the league, you will use the following route:
+
+`/tournaments/<tournament_id>/leagues/<league_id>`
+
+If you want to perform a POST call:
+
+`/tournaments/<tournament_id>/leagues`
+
+</Callout>

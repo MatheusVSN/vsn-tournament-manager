@@ -1,0 +1,20 @@
+import { Callout } from "nextra/components"
+
+# Authorization
+
+Many of the routes in this API require authorization. This means that you must provide a valid JWT token in the `Authorization` header of your HTTP request.
+
+The JWT token is obtained when a user logs in, via the [POST `authentication/login`](/routes/authentication/#post-authenticationlogin) route.
+The token is returned in the `token` field of the response body.
+
+To provide the token in your request, include it in the `Authorization` header with the format `Bearer {token}`, where `{token}` is the JWT token. For example:
+
+```json
+"Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+```
+
+If a route requires authorization and you do not provide a valid token, or if the token does not grant you permission to perform the requested operation, the API will return a 401 Unauthorized.
+
+<Callout type="warning" emoji="⚠️">
+  All GET Routes at the moment does not need the user to be authenticated.
+</Callout>

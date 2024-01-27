@@ -1,0 +1,11 @@
+{
+    "cSpell.words": [
+        "dotenv",
+        "sqlx"
+    ],
+    "rust-analyzer.linkedProjects": [
+        ".\\Cargo.toml",
+        ".\\Cargo.toml",
+        ".\\Cargo.toml"
+    ]
+}

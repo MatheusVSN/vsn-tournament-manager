@@ -1,0 +1,123 @@
+# Tournament
+
+This route is responsible for actions related to tournaments.
+
+
+## POST `/tournament`
+
+## DELETE `/tournament/<tournament_id>`
+
+### Parameters
+
+- `tournament_id`: The id of the tournament to delete.
+
+### Request Body
+
+```json
+{
+  "name": string,
+  "public": boolean
+}
+```
+
+- `name`: The name of the tournament
+- `public`: Whether the tournament should be public(if it's visible to others) or not.
+
+### Responses
+
+#### 200(OK)
+
+The tournament have been successfully created.
+The response body will contain the tournament id on the data property
+
+```json
+{
+  "message": string,
+  "data": {
+    "id": string
+  }
+}
+```
+
+#### 400(Bad Request)
+
+The bad request can happen for the following reasons:
+
+- The tournament name contains more than 20 characters
+
+## PUT `/tournament/<tournament_id>`
+
+### Parameters
+
+- `tournament_id`: The id of the tournament to update.
+
+### Request Body
+
+```json
+{
+  "name": string,
+  "public": boolean
+}
+```
+
+- `name`: The name of the tournament
+- `public`: Whether the tournament should be public(if it's visible to others) or not.
+
+### Responses
+
+#### 200(OK)
+
+The tournament have been successfully updated.
+
+```json
+{
+  "message": string
+}
+```
+
+#### 400(Bad Request)
+
+The bad request can happen for the following reasons:
+
+- The tournament name contains more than 20 characters
+
+## GET `/tournament/<tournament_id>`
+
+### Parameters
+
+- `tournament_id`: The id of the tournament to get.
+
+### Responses
+
+#### 200(OK)
+
+The tournament data have been succesfully retreived
+
+```json
+{
+  "id": number,
+  "name": string,
+  "leagues": [
+    {
+      "id": string,
+      "name": string,
+      "completed": boolean
+    },
+    // ...
+  ],
+  "teams": [
+    {
+      "id": string,
+      "name": string,
+    },
+    // ...
+  ]
+}
+```
+
+#### 400(BadRequest)
+
+The bad request can happen for the following reasons:
+
+- The tournament does not exist
+- The tournament is private and the user is not authenticated or the user is not the tournament owner

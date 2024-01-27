@@ -1,0 +1,70 @@
+# Authentication
+
+This route is responsible to handle user registrarion and login flow.
+It's also responsible to generate a JWT Acess tokens so the client can interact with the API.
+
+## POST `authentication/register`
+
+This route is responsible to register new users.
+
+### Request Body
+
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+
+### Responses
+
+##### 200(OK)
+
+The user was created successfully.
+
+```json
+{
+  "message": "Account created successfully"
+}
+```
+
+##### 400(Bad Request)
+
+A bad request can happen for the following reasons:
+
+- The e-mail is invalid
+- The e-mail has already been taken
+
+## POST `authentication/login`
+
+This route is responsible to check the user credentials and generate a JWT access token.
+
+### Request Body
+
+```json
+{
+  "email": string,
+  "password": string
+}
+```
+
+### Responses
+
+##### 200(OK)
+
+```json
+{
+  "message": Success!,
+  "data": {
+    "token": string
+  }
+}
+```
+
+##### 400(Bad Request)
+
+A bad request can happen for the following reasons:
+
+- The e-mail is invalid
+- The user does not exist
+- The password is incorrect

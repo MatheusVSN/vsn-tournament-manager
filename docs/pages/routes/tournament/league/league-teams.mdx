@@ -1,0 +1,49 @@
+# League teams
+
+This route is responsible to operate with teams on the league
+
+## `POST /teams/<team_id>`
+
+### Parameters
+
+- `team_id`- The team id
+
+### Responses
+
+#### 200(OK)
+
+The team have been added to the league successfully
+
+```json
+{
+    "message": string
+}
+```
+
+#### 400(Bad Request)
+
+A bad request can happen for the following reasons:
+
+- The team is already on the league
+- The team does not exist
+- The user does not own the tournament
+
+## `DELETE /teams/<team_id>`
+
+### Parameters
+
+- `team_id`- The team id
+
+### Responses
+
+#### 204(No Content)
+
+The team have been removed from the league successfully. This response do not have a body
+
+#### 400(Bad Request)
+
+A bad request can happen for the following reasons:
+
+- The team is not on the league
+- The team does not exist
+- The user does not own the tournament
