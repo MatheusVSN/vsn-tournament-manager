@@ -287,6 +287,14 @@ impl League {
         team_id: u64,
         db_pool: &Pool<MySql>,
     ) -> Result<(), HTTPException> {
+        let teams_quantity =
+            Self::get_teams_quantity_from_league(user_id, league_id, db_pool).await?;
+        if teams_quantity >= 24 {
+            return Err(HTTPException::BadRequest(String::from(
+                "The league is full",
+            )));
+        }
+
         let query = sqlx::query!(
             "
         INSERT INTO `teams_leagues` (`league_id`, `team_id`)
@@ -654,6 +662,58 @@ impl League {
             .collect();
 
         Ok(standing_table)
+    }
+
+    /// Responsible to get the quantity of teams from the league
+    ///
+    /// # Arguments
+    /// * `user_id` - `u64` integer which represents the user id
+    /// * `league_id` - `u64` integer which represents the league id
+    /// * `db_pool` - A `&Pool<MySql>` reference for the MySQL database connection
+    ///
+    /// # Returns
+    /// * `Ok(i64)` - `i64` integer which represents the quantity of teams from the league(it may returns 0 if the league/tournament does not exists or the user acessing does not have permission to access it)
+    ///
+    /// # Errors
+    /// * `HTTPException::Internal` - If the database query fails
+    async fn get_teams_quantity_from_league(
+        user_id: u64,
+        league_id: u64,
+        db_pool: &Pool<MySql>,
+    ) -> Result<i64, HTTPException> {
+        let query = sqlx::query!(
+            r#"
+            SELECT COUNT(TeamRow.id) AS team_count FROM `teams` as TeamRow
+            INNER JOIN `tournaments` as TournamentRow
+                ON TournamentRow.id = TeamRow.tournament_id
+            INNER JOIN `leagues` as LeagueRow
+                ON LeagueRow.tournament_id = TournamentRow.id
+            WHERE LeagueRow.id = (?)
+            AND (
+                (TournamentRow.public = FALSE AND TournamentRow.user_id = (?)) 
+                OR 
+                (TournamentRow.public = TRUE)
+            )
+        "#,
+            league_id,
+            user_id
+        )
+        .fetch_all(db_pool)
+        .await
+        .or_else(|e| {
+            Err(HTTPException::Internal(String::from(
+                "Failed to get the teams quantity from the league. Please try again later",
+            )))
+        })?;
+
+        match query.get(0) {
+            None => {
+                return Err(HTTPException::Internal(String::from(
+                    "Failed to get the teams quantity from the league. Please try again later",
+                )));
+            }
+            Some(data) => Ok(data.team_count),
+        }
     }
 }
 
