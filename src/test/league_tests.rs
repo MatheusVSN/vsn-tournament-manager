@@ -958,3 +958,81 @@ async fn get_league_standing_table_test() {
         .await
         .unwrap();
 }
+
+// Creating more than 24 teams
+// Maximum teams a league can have is 24
+#[rocket::async_test]
+async fn creating_more_than_24_teams() {
+    let client = Client::tracked(rocket().await).await.unwrap();
+    let authorization_token = register_and_login(&client).await;
+    // Creating a tournament
+    let tournament_data = r#"{
+        "name": "adding team",
+        "public": true
+    }"#;
+
+    let response =
+        create_tournament_request(&client, Some(&authorization_token), tournament_data).await;
+    assert_eq!(response.status(), Status::Created);
+    // Getting the tournament id
+    let response_body = response
+        .into_json::<APIResponse<IdData>>()
+        .await
+        .expect("Expected tournament id data");
+    let tournament_id = response_body.data.id;
+    // Creating a league
+    let league_data = r#"{
+            "name": "new league",
+            "completed": false
+        }"#;
+    let response = create_league_request(
+        &client,
+        Some(&authorization_token),
+        league_data,
+        tournament_id,
+    )
+    .await;
+    assert_eq!(response.status(), Status::Created);
+    // Getting the league id
+    let response_body = response.into_json::<APIResponse<IdData>>().await.unwrap();
+    let league_id = response_body.data.id;
+    // Creating 25 teams
+    for count in 0..25 {
+        let team_data = r#"{
+            "name": "new team"
+        }"#;
+        let response = create_team_request(
+            &client,
+            Some(&authorization_token),
+            team_data,
+            tournament_id,
+        )
+        .await;
+
+        assert_eq!(response.status(), Status::Created);
+
+        let team_id = response
+            .into_json::<APIResponse<IdData>>()
+            .await
+            .expect("Expected team id data")
+            .data
+            .id;
+
+        // Adding the team to the league
+        let response = add_team_to_league_request(
+            &client,
+            Some(&authorization_token),
+            tournament_id,
+            league_id,
+            team_id,
+        )
+        .await;
+
+        if count < 23 {
+            assert_eq!(response.status(), Status::Ok);
+        } else {
+            // Should not be allowed because the league team limit is 24
+            assert_ne!(response.status(), Status::Ok);
+        }
+    }
+}
