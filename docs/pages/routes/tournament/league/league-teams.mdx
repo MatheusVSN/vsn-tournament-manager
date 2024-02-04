@@ -4,6 +4,9 @@ This route is responsible to operate with teams on the league
 
 ## `POST /teams/<team_id>`
 
+Adds a team to the league.
+A league can have a maximum of 24 teams
+
 ### Parameters
 
 - `team_id`- The team id
@@ -29,6 +32,8 @@ A bad request can happen for the following reasons:
 - The user does not own the tournament
 
 ## `DELETE /teams/<team_id>`
+
+Removes a team from the league
 
 ### Parameters
 
